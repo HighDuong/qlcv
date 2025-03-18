@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Công Việc</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    form input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    form input:focus {
+      border-color: #5563DE;
+    }
+    form button {
+      padding: 12px 20px;
+      border: none;
+      background-color: #5563DE;
+      color: white;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    form button:hover {
+      background-color: #3f50b5;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      background-color: #f9f9f9;
+      padding: 15px 20px;
+      margin: 10px 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    li:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .delete-btn {
+      background-color: #e53935;
+      border: none;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .delete-btn:hover {
+      background-color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quản Lý Công Việc</h1>
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="Nhập công việc..." required>
+      <button type="submit">Thêm</button>
+    </form>
+    <ul id="taskList" aria-live="polite"></ul>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const taskForm = document.getElementById("taskForm");
+      const taskInput = document.getElementById("taskInput");
+      const taskList = document.getElementById("taskList");
+      let tasks = [];
+
+      taskForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        addTask();
+      });
+
+      function addTask() {
+        const task = taskInput.value.trim();
+        if (task) {
+          tasks.push(task);
+          taskInput.value = "";
+          displayTasks();
+        } else {
+          alert("Vui lòng nhập công việc!");
+        }
+      }
+
+      function removeTask(index) {
+        tasks.splice(index, 1);
+        displayTasks();
+      }
+
+      function displayTasks() {
+        taskList.innerHTML = "";
+        tasks.forEach((task, index) => {
+          const li = document.createElement("li");
+          li.textContent = task;
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "Xóa";
+          deleteBtn.className = "delete-btn";
+          deleteBtn.setAttribute("aria-label", `Xóa công việc: ${task}`);
+          deleteBtn.addEventListener("click", () => removeTask(index));
+
+          li.appendChild(deleteBtn);
+          taskList.appendChild(li);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
